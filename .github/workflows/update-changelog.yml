@@ -1,35 +1,43 @@
-name: Update Changelog
+name: Update Changelog in PR
 
 on:
-  push:
+  pull_request:
     branches: [main]
+    types: [opened, synchronize, reopened]
 
 jobs:
-  update-changelog:
+  changelog:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write  # allows committing back to repo
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      
-      - name: Fetch all remote branches
-        run: git fetch --all
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # full history
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.13'
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.13
 
-      - name: Run changelog updater
-        run: python scripts/changelog/main.py
+    - name: Install dependencies
+      run: pip install -r requirements.txt || true
 
-      - name: Commit and push CHANGELOG.md
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
+    - name: Generate Unreleased changelog
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        python scripts/changelog/main.py unreleased
+
+    - name: Commit changelog if changed
+      run: |
+        if git diff --quiet CHANGELOG.md; then
+          echo "No changes to commit"
+        else
           git add CHANGELOG.md
-          git commit -m "Auto-update CHANGELOG.md" || echo "No changes to commit"
-          git pull --rebase origin main || echo "No upstream changes"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
+          git commit -m "Update CHANGELOG.md"
+          git push
+        fi
