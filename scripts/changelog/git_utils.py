@@ -15,7 +15,7 @@ def get_changed_files_and_messages():
     try:
         # Show only relevant changes compared to remote main (adjust origin/main as needed)
         result = subprocess.run(
-            ["git", "diff", "--name-only", "--diff-filter=ACMRTUXB", "origin/main...HEAD"],
+            ["git", "diff", "--name-only", "--diff-filter=ACMRTUXB", "HEAD~3"],
             capture_output=True,
             text=True,
             check=True
