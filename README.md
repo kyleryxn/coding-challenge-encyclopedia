@@ -16,6 +16,7 @@ Each folder contains:
 
 | Problem | Languages | Source(s) | Topic(s) |
 |---------|-----------|-----------|----------|
+| [Jumbled Numbers](./challenges/jumbled-numbers) | Java | J.P. Morgan | HashTable, String, Greedy
 | [Median Two Sorted Arrays](./challenges/median-two-sorted-arrays) | Java | LeetCode | Array, Binary Search, Divide and Conquer
 | [Ninja Words](./challenges/ninja-words) | Java | IBM | Array, Two Pointer
 | [Profit Targets](./challenges/profit-targets) | Java | Unknown | HashTable
