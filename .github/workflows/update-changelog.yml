@@ -1,22 +1,24 @@
-name: Update Changelog in PR
+name: Update Changelog on Main Push
 
 on:
-  pull_request:
+  push:
     branches: [main]
-    types: [opened, synchronize, reopened]
 
 jobs:
   changelog:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write  # allows committing back to repo
+      contents: write  # Required to commit back to repo
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # full history
+        fetch-depth: 0  # Ensure full history
+
+    - name: Fetch all branches
+      run: git fetch --all
 
     - name: Set up Python
       uses: actions/setup-python@v5
