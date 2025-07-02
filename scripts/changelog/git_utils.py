@@ -7,7 +7,7 @@ def get_changed_files_and_messages():
     try:
         if is_ci:
             base_ref = os.getenv("GITHUB_BASE_REF") or "origin/main"
-            diff_range = f"{base_ref}...HEAD"
+            diff_range = "HEAD~1"
             print(f"[DEBUG] CI mode: git diff {diff_range}")
             result = subprocess.run(
                 ["git", "diff", "--name-only", "--diff-filter=ACMRTUXB", diff_range],
