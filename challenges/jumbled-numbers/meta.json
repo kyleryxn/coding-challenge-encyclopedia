@@ -1,0 +1,6 @@
+{
+    "source": "J.P. Morgan",
+    "difficulty": "Medium",
+    "topics": ["HashTable, String, Greedy"],
+    "changelog note": "Initial Java solution added"
+}
