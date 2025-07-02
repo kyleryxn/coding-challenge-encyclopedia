@@ -48,8 +48,12 @@ def write_changelog(version: str, date: str, changes: dict, mode: str = "unrelea
     cleaned_lines = remove_existing_sections(existing_lines, version)
 
     # Only add header once
-    if "# Changelog" not in "\n".join(cleaned_lines):
+    if cleaned_lines[:len(header)] != header:
         cleaned_lines = header + [""] + cleaned_lines
 
-    final = cleaned_lines[:len(header)] + body + cleaned_lines[len(header):]
+    # Insert new body after header block
+    header_end_index = len(header)
+    final = cleaned_lines[:header_end_index] + body + cleaned_lines[header_end_index:]
+
     CHANGELOG_PATH.write_text("\n".join(final))
+
