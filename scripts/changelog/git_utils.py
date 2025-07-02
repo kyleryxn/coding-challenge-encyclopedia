@@ -4,7 +4,9 @@ IGNORED_PATTERNS = [
     ".github/",
     ".yml",
     ".yaml",
+    "LICENSE",
     "CHANGELOG.md",
+    "README.md",
     "version.txt",
 ]
 
@@ -13,16 +15,26 @@ def is_meaningful_file(file):
 
 def get_changed_files_and_messages():
     try:
-        # Show only relevant changes compared to remote main (adjust origin/main as needed)
         result = subprocess.run(
             ["git", "diff", "--name-only", "--diff-filter=ACMRTUXB", "HEAD~3"],
             capture_output=True,
             text=True,
             check=True
         )
-        changed_files = [f for f in result.stdout.strip().splitlines() if is_meaningful_file(f)]
+        raw_files = result.stdout.strip().splitlines()
+        print("[DEBUG] Raw diff files:", raw_files)
     except subprocess.CalledProcessError:
-        changed_files = []
+        raw_files = []
+        print("[DEBUG] Git diff failed.")
+
+    changed_files = []
+    for f in raw_files:
+        if is_meaningful_file(f):
+            changed_files.append(f)
+        else:
+            print(f"[DEBUG] Filtered out: {f}")
+
+    print("[DEBUG] Final files after filtering:", changed_files)
 
     file_to_message = {}
     for file in changed_files:
@@ -39,3 +51,4 @@ def get_changed_files_and_messages():
         file_to_message[file] = message
 
     return file_to_message
+
