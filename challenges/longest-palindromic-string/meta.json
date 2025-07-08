@@ -1,0 +1,6 @@
+{
+    "source": "LeetCode",
+    "difficulty": "Medium",
+    "topics": ["Two Pointers", "String", "Dynamic Programming"],
+    "changelog note": "Initial Java solution added"
+}
